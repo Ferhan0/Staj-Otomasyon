@@ -188,30 +188,46 @@
         }
 
         function saveFirma() {
-            const formData = new FormData(document.getElementById('firmaForm'));
-            const firma = {};
+        try {
+            // Form verilerini al
+            const firma = {
+                firmaAdi: document.querySelector('[name="firmaAdi"]').value.trim(),
+                sektor: document.querySelector('[name="sektor"]').value.trim(),
+                adres: document.querySelector('[name="adres"]').value.trim(),
+                telefon: document.querySelector('[name="telefon"]').value.trim(),
+                email: document.querySelector('[name="email"]').value.trim(),
+                webSitesi: document.querySelector('[name="webSitesi"]').value.trim(),
+                yetkiliAdi: document.querySelector('[name="yetkiliAdi"]').value.trim(),
+                yetkiliUnvan: document.querySelector('[name="yetkiliUnvan"]').value.trim(),
+                yetkiliTelefon: document.querySelector('[name="yetkiliTelefon"]').value.trim(),
+                yetkiliEmail: document.querySelector('[name="yetkiliEmail"]').value.trim(),
+                stajyerSayisi: document.querySelector('[name="stajyerSayisi"]').value || '1',
+                stajAlanlari: document.querySelector('[name="stajAlanlari"]').value.trim()
+            };
 
-            for (let [key, value] of formData.entries()) {
-                firma[key] = value;
-            }
-
-            // Validate required fields
+            // Zorunlu alanları kontrol et
             const requiredFields = ['firmaAdi', 'sektor', 'adres', 'telefon', 'email', 'yetkiliAdi', 'yetkiliTelefon', 'yetkiliEmail'];
             for (let field of requiredFields) {
-                if (!firma[field] || !firma[field].trim()) {
-                    alert('Lütfen tüm zorunlu alanları doldurunuz.');
+                if (!firma[field]) {
+                    alert(`${field} alanı zorunludur!`);
                     return;
                 }
             }
 
+            // ID ve tarih ekle
             firma.id = Date.now();
             firma.kayitTarihi = new Date().toLocaleDateString('tr-TR');
             firma.durum = 'aktif';
-            firma.stajyerSayisi = firma.stajyerSayisi || 1;
 
+            // LocalStorage'a kaydet
+            let firmalar = JSON.parse(localStorage.getItem('firmalar') || '[]');
             firmalar.push(firma);
             localStorage.setItem('firmalar', JSON.stringify(firmalar));
 
+            // Global değişkeni güncelle
+            window.firmalar = firmalar;
+
+            // Aktivite ekle
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             const activity = {
                 id: Date.now(),
@@ -230,11 +246,22 @@
             }
             localStorage.setItem('recentActivities', JSON.stringify(activities));
 
+            // Tabloyu güncelle
             renderTable();
+            
+            // Formu temizle
             document.getElementById('firmaForm').reset();
             
             alert(`${firma.firmaAdi} başarıyla sisteme kaydedildi!`);
+            
+            console.log('Firma kaydedildi:', firma);
+            console.log('Toplam firma sayısı:', firmalar.length);
+
+        } catch (error) {
+            console.error('Firma kayıt hatası:', error);
+            alert('Firma kaydında hata oluştu: ' + error.message);
         }
+    }
 
         function renderTable() {
             const tbody = document.getElementById('firmaListesi');

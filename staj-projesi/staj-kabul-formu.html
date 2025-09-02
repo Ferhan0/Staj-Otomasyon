@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Staj Kabul Formu - Adıyaman Üniversitesi</title>
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+   <style>
+       /* Screen styles */
+       body {
+           background-color: #f8fafc;
+           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+       }
+       
+       .form-container {
+           background: white;
+           margin: 20px auto;
+           max-width: 210mm; /* A4 width */
+           box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+       }
+       
+       .no-print {
+           background: linear-gradient(135deg, #1e40af, #3b82f6);
+           color: white;
+           padding: 20px;
+           text-align: center;
+           margin-bottom: 0;
+       }
+       
+       .no-print .btn {
+           margin: 0 10px;
+           padding: 10px 20px;
+           border: 2px solid white;
+           color: white;
+           background: transparent;
+           border-radius: 8px;
+           font-weight: 600;
+           transition: all 0.3s ease;
+       }
+       
+       .no-print .btn:hover {
+           background: white;
+           color: #1e40af;
+       }
+
+       /* Print styles */
+       @media print {
+           body {
+               background: white !important;
+               margin: 0 !important;
+               padding: 0 !important;
+           }
+           
+           .no-print {
+               display: none !important;
+           }
+           
+           .form-container {
+               box-shadow: none !important;
+               margin: 0 !important;
+               max-width: none !important;
+               width: 100% !important;
+           }
+           
+           .page-break {
+               page-break-before: always;
+           }
+       }
+
+       /* Form styles */
+       .header-section {
+           text-align: center;
+           padding: 30px 40px 20px;
+           border-bottom: 3px solid #1e40af;
+           margin-bottom: 30px;
+       }
+       
+       .university-logo {
+           width: 80px;
+           height: 80px;
+           background: #1e40af;
+           border-radius: 50%;
+           margin: 0 auto 15px;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           font-size: 2rem;
+           color: white;
+       }
+       
+       .form-content {
+           padding: 0 40px 40px;
+       }
+       
+       .form-section {
+           margin-bottom: 25px;
+       }
+       
+       .form-section h4 {
+           color: #1e40af;
+           border-bottom: 2px solid #e5e7eb;
+           padding-bottom: 8px;
+           margin-bottom: 20px;
+           font-size: 1.1rem;
+       }
+       
+       .form-row {
+           display: flex;
+           margin-bottom: 15px;
+           gap: 20px;
+       }
+       
+       .form-field {
+           flex: 1;
+           min-height: 25px;
+           display: flex;
+           align-items: center;
+       }
+       
+       .form-field label {
+           font-weight: 600;
+           margin-right: 10px;
+           min-width: 120px;
+           font-size: 0.9rem;
+       }
+       
+       .form-field .underline {
+           flex: 1;
+           border-bottom: 1px solid #333;
+           min-height: 25px;
+           padding-left: 5px;
+           font-weight: 500;
+       }
+       
+       .checkbox-section {
+           margin: 25px 0;
+       }
+       
+       .checkbox-item {
+           display: flex;
+           align-items: center;
+           margin-bottom: 10px;
+       }
+       
+       .checkbox {
+           width: 15px;
+           height: 15px;
+           border: 1px solid #333;
+           margin-right: 10px;
+           display: inline-flex;
+           align-items: center;
+           justify-content: center;
+           font-size: 12px;
+       }
+       
+       .signature-section {
+           margin-top: 40px;
+           display: flex;
+           justify-content: space-between;
+           gap: 40px;
+       }
+       
+       .signature-box {
+           text-align: center;
+           flex: 1;
+       }
+       
+       .signature-line {
+           border-bottom: 1px solid #333;
+           height: 50px;
+           margin-bottom: 10px;
+       }
+       
+       .date-field {
+           display: inline-block;
+           width: 150px;
+           border-bottom: 1px solid #333;
+           text-align: center;
+           margin: 0 5px;
+       }
+       
+       .bold {
+           font-weight: 700;
+       }
+       
+       .text-center {
+           text-align: center;
+       }
+       
+       .text-small {
+           font-size: 0.85rem;
+       }
+   </style>
+</head>
+<body>
+   <!-- Control Panel - Not printed -->
+   <div class="no-print">
+       <h4><i class="fas fa-file-pdf me-2"></i>Staj Kabul Formu Oluşturucu</h4>
+       <p>Öğrenci seçin ve formu doldurun</p>
+       <div class="mb-3">
+           <select class="form-select form-select-sm" id="studentSelect" style="max-width: 400px; margin: 0 auto;">
+               <option value="">Öğrenci seçiniz...</option>
+           </select>
+       </div>
+       <button class="btn" onclick="fillForm()">
+           <i class="fas fa-edit me-2"></i>Formu Doldur
+       </button>
+       <button class="btn" onclick="window.print()">
+           <i class="fas fa-print me-2"></i>Yazdır / PDF
+       </button>
+       <button class="btn" onclick="window.close()">
+           <i class="fas fa-times me-2"></i>Kapat
+       </button>
+   </div>
+
+   <!-- Printable Form -->
+   <div class="form-container">
+       <div class="header-section">
+           <div class="university-logo">
+               <i class="fas fa-graduation-cap"></i>
+           </div>
+           <h2 class="bold">T.C.</h2>
+           <h3 class="bold">ADIYAMAN ÜNİVERSİTESİ</h3>
+           <h4>Staj Kabul Formu</h4>
+           <div class="text-small" style="margin-top: 15px;">
+               <span>ÖĞLM.FP.38 - 3</span>
+               <span style="float: right;">Sayfa 1 / 1</span>
+           </div>
+       </div>
+
+       <div class="form-content">
+           <!-- Akademik Yıl -->
+           <div class="form-row">
+               <div class="form-field">
+                   <label>Akademik Yıl:</label>
+                   <div class="underline" id="akademikYil"></div>
+               </div>
+               <div class="form-field">
+                   <label>Yarıyıl:</label>
+                   <div class="underline" id="yariyil"></div>
+               </div>
+           </div>
+
+           <!-- Öğrenci Bilgileri Bölümü -->
+           <div class="form-section">
+               <h4>ÖĞRENCİ BİLGİLERİ</h4>
+               
+               <div class="form-row">
+                   <div class="form-field">
+                       <label>Fak. / YO / MYO:</label>
+                       <div class="underline" id="fakulte">BİLGİSAYAR VE BİLİŞİM BİLİMLERİ FAKÜLTESİ</div>
+                   </div>
+               </div>
+
+               <div class="form-row">
+                   <div class="form-field">
+                       <label>Bölüm / Program:</label>
+                       <div class="underline" id="bolumProgram">BİLGİSAYAR MÜHENDİSLİĞİ BÖLÜMÜ</div>
+                   </div>
+               </div>
+
+               <div class="form-row">
+                   <div class="form-field">
+                       <label>Adı Soyadı:</label>
+                       <div class="underline" id="adiSoyadi"></div>
+                   </div>
+                   <div class="form-field">
+                       <label>Öğrenci No:</label>
+                       <div class="underline" id="ogrenciNo">b191210307</div>
+                   </div>
+               </div>
+
+               <div class="form-row">
+                   <div class="form-field">
+                       <label>T.C. Kimlik No:</label>
+                       <div class="underline" id="tcKimlikNo">28292401644</div>
+                   </div>
+                   <div class="form-field">
+                       <label>E-posta:</label>
+                       <div class="underline" id="eposta">bedrettin.akyuz@ogr.sakarya.edu.tr</div>
+                   </div>
+               </div>
+
+               <div class="form-row">
+                   <div class="form-field">
+                       <label>Cep Tel.:</label>
+                       <div class="underline" id="ceptel">54197300061</div>
+                   </div>
+                   <div class="form-field">
+                       <label>İBAN:</label>
+                       <div class="underline" id="iban"></div>
+                   </div>
+               </div>
+           </div>
+
+           <!-- Staj Bilgileri -->
+           <div class="form-section">
+               <h4>YAPILACAĞI UYGULAMALI EĞİTİM</h4>
+               
+               <div class="form-row">
+                   <div class="form-field">
+                       <label>Ders Kodu:</label>
+                       <div class="underline" id="dersKodu"></div>
+                   </div>
+                   <div class="form-field">
+                       <label>Ders Adı:</label>
+                       <div class="underline" id="dersAdi"></div>
+                   </div>
+               </div>
+
+               <div class="form-row">
+                   <div class="form-field">
+                       <label>Türü:</label>
+                       <div class="checkbox-section" style="display: inline-flex; gap: 20px;">
+                           <div class="checkbox-item">
+                               <div class="checkbox" id="isyeriMesleki"></div>
+                               <span>İşyerinde Mesleki Eğitim</span>
+                           </div>
+                           <div class="checkbox-item">
+                               <div class="checkbox" id="dersUygulamasi"></div>
+                               <span>Ders Uygulaması</span>
+                           </div>
+                           <div class="checkbox-item">
+                               <div class="checkbox" id="umde"></div>
+                               <span>ÜMDE</span>
+                           </div>
+                           <div class="checkbox-item">
+                               <div class="checkbox" id="diger"></div>
+                               <span>Diğer ...</span>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
+               <div class="form-row">
+                   <div class="form-field">
+                       <label>Süresi (İş Günü):</label>
+                       <div class="underline" id="suresi">20 Gün</div>
+                   </div>
+               </div>
+
+               <div class="form-row">
+                   <div class="form-field">
+                       <label>Başlangıç ve Bitiş Tarihi:</label>
+                       <div class="underline" id="baslangicBitis">18.08.2025 - 12.09.2025</div>
+                   </div>
+               </div>
+           </div>
+
+           <!-- GSS Beyanı -->
+           <div class="form-section">
+               <h4>Genel Sağlık Sigortası Beyanı ve Taahhüdü</h4>
+               <div class="checkbox-section">
+                   <div class="checkbox-item">
+                       <div class="checkbox" id="ailesidenAnnem"></div>
+                       <span>Ailesinden Annem / Babam üzerinden Genel sağlık sigortası kapsamında sağlık hizmeti alıyorum. Bu nedenle mesleki uygulama boyunca genel sağlık sigortası kapsamı olmaya kabul ediyorum.</span>
+                   </div>
+                   <div class="checkbox-item">
+                       <div class="checkbox" id="ailesidenAnnem2"></div>
+                       <span>Ailesinden Annem / Babam üzerinden Genel sağlık sigortası kapsamında sağlık hizmeti almıyorum. Bu nedenle mesleki uygulama boyunca genel sağlık sigortası kapsamı olmaye kabul etmiyorum.</span>
+                   </div>
+               </div>
+           </div>
+
+           <!-- Signatures -->
+           <div class="signature-section">
+               <div class="signature-box">
+                   <div class="signature-line"></div>
+                   <div class="bold">Öğrencinin İmzası</div>
+               </div>
+               <div class="signature-box">
+                   <div class="signature-line"></div>
+                   <div class="bold">Koordinatör Öğretim Üyesinin İmzası</div>
+               </div>
+           </div>
+
+           <!-- Footer -->
+           <div class="text-center text-small" style="margin-top: 50px;">
+               <p>Bilgi İşlem Daire Başkanlığı<br>Adıyaman Üniversitesi</p>
+           </div>
+       </div>
+   </div>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+   <script>
+       let stajBasvurulari = [];
+       
+       document.addEventListener('DOMContentLoaded', function() {
+           loadStudents();
+       });
+       
+       function loadStudents() {
+           stajBasvurulari = JSON.parse(localStorage.getItem('stajBasvurulari')) || [];
+           const select = document.getElementById('studentSelect');
+           
+           select.innerHTML = '<option value="">Öğrenci seçiniz...</option>';
+           
+           stajBasvurulari.forEach((student, index) => {
+               const option = document.createElement('option');
+               option.value = index;
+               option.textContent = `${student.adSoyad} - ${student.ogrenciNo} (${student.stajTuru})`;
+               select.appendChild(option);
+           });
+       }
+       
+       function fillForm() {
+           const selectedIndex = document.getElementById('studentSelect').value;
+           
+           if (selectedIndex === '') {
+               alert('Lütfen bir öğrenci seçiniz!');
+               return;
+           }
+           
+           const student = stajBasvurulari[selectedIndex];
+           
+           // Form alanlarını doldur
+           document.getElementById('akademikYil').textContent = student.akademikYil || '2024-2025';
+           document.getElementById('yariyil').textContent = getYariyil(student.stajTuru);
+           document.getElementById('fakulte').textContent = student.fakulte || '';
+           document.getElementById('bolumProgram').textContent = student.bolum || '';
+           document.getElementById('adiSoyadi').textContent = student.adSoyad || '';
+           document.getElementById('ogrenciNo').textContent = student.ogrenciNo || '';
+           document.getElementById('tcKimlikNo').textContent = generateTcNo();
+           document.getElementById('eposta').textContent = student.email || '';
+           document.getElementById('ceptel').textContent = student.telefon || '';
+           document.getElementById('iban').textContent = generateIban();
+           
+           // Staj bilgileri
+           document.getElementById('dersKodu').textContent = getDersKodu(student.stajTuru);
+           document.getElementById('dersAdi').textContent = student.stajTuru || '';
+           document.getElementById('suresi').textContent = getStajSuresi(student.stajTuru);
+           document.getElementById('baslangicBitis').textContent = `${formatDate(student.baslangicTarihi)} - ${formatDate(student.bitisTarihi)}`;
+           
+           // Checkboxları işaretle
+           document.getElementById('isyeriMesleki').textContent = '';
+           document.getElementById('ailesidenAnnem').textContent = '';
+           
+           alert('Form başarıyla dolduruldu! Artık yazdırabilirsiniz.');
+       }
+       
+       function getYariyil(stajTuru) {
+           const yaz = ['Yaz Stajı I', 'Yaz Stajı II'];
+           return yaz.includes(stajTuru) ? 'Yaz' : 'Güz/Bahar';
+       }
+       
+       function getDersKodu(stajTuru) {
+           const kodlar = {
+               'Yaz Stajı I': 'STAJ301',
+               'Yaz Stajı II': 'STAJ302',
+               'Zorunlu Staj': 'STAJ401'
+           };
+           return kodlar[stajTuru] || 'STAJ';
+       }
+       
+       function getStajSuresi(stajTuru) {
+           const sureler = {
+               'Yaz Stajı I': '30 Gün',
+               'Yaz Stajı II': '30 Gün',
+               'Zorunlu Staj': '60 Gün'
+           };
+           return sureler[stajTuru] || '30 Gün';
+       }
+       
+       function formatDate(dateStr) {
+           if (!dateStr) return '';
+           const date = new Date(dateStr);
+           return date.toLocaleDateString('tr-TR');
+       }
+       
+       function generateTcNo() {
+           // Bu örnek için sabit bir TC no
+           return '12345678901';
+       }
+       
+       function generateIban() {
+           // Örnek IBAN
+           return 'TR12 3456 7890 1234 5678 9012 34';
+       }
+
+       function openKabulFormu(appId) {
+           // Bu fonksiyonu staj-listesi.html'ye ekleyeceksiniz
+           const app = allApplications.find(a => a.id === appId);
+           if (!app) return;
+           
+           // Yeni pencerede kabul formunu aç
+           const formWindow = window.open('staj-kabul-formu.html', '_blank', 'width=1000,height=800');
+           
+           // Form yüklendikten sonra veriyi aktar
+           formWindow.addEventListener('load', function() {
+               if (formWindow.fillFormWithData) {
+                   formWindow.fillFormWithData(app);
+               }
+           });
+       }
+   </script>
+</body>
+</html>

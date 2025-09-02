@@ -529,6 +529,9 @@
                 <button class="btn btn-action btn-info" onclick="showDetails(${app.id})" title="Detayları Görüntüle">
                     <i class="fas fa-eye"></i>
                 </button>
+                <button class="btn btn-action btn-success" onclick="openKabulFormu(${app.id})" title="Kabul Formu">
+                    <i class="fas fa-file-pdf"></i>
+                </button>
                 <button class="btn btn-action btn-warning" onclick="showStatusModal(${app.id})" title="Durum Değiştir">
                     <i class="fas fa-edit"></i>
                 </button>
@@ -746,6 +749,24 @@
         
         function printList() {
             window.print();
+        }
+
+        function openKabulFormu(appId) {
+            const app = allApplications.find(a => a.id === appId);
+            if (!app) {
+                alert('Başvuru bulunamadı!');
+                return;
+            }
+            
+            // Seçili öğrenciyi localStorage'a kaydet
+            localStorage.setItem('selectedStudentForForm', JSON.stringify(app));
+            
+            // Yeni pencerede kabul formunu aç
+            const formWindow = window.open('staj-kabul-formu.html', '_blank', 'width=1000,height=800,scrollbars=yes');
+            
+            if (!formWindow) {
+                alert('Pop-up engellenmiş olabilir. Lütfen tarayıcı ayarlarınızı kontrol edin.');
+            }
         }
         </script>
 </body>
