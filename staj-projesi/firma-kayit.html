@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firma Kaydı - Adıyaman Üniversitesi</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8fafc; }
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #1e40af, #3b82f6);">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="dashboard.html">
+                <i class="fas fa-graduation-cap me-2"></i>Adıyaman Üniversitesi
+            </a>
+            <a class="btn btn-outline-light" href="dashboard.html">
+                <i class="fas fa-arrow-left me-2"></i>Ana Panel
+            </a>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <div class="text-center mb-4">
+            <h2><i class="fas fa-building me-2"></i>Yeni Firma Kaydı</h2>
+            <p class="text-muted">Staj imkanı sunan firmaları sisteme kaydedin</p>
+        </div>
+
+        <form id="firmaForm">
+            <div class="form-section">
+                <h4 class="mb-4"><i class="fas fa-info-circle me-2"></i>Firma Bilgileri</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Firma Adı *</label>
+                        <input type="text" class="form-control form-control-lg" name="firmaAdi" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Sektör *</label>
+                        <select class="form-select form-select-lg" name="sektor" required>
+                            <option value="">Seçiniz</option>
+                            <option value="Yazılım ve Bilişim">Yazılım ve Bilişim</option>
+                            <option value="İmalat">İmalat</option>
+                            <option value="İnşaat">İnşaat</option>
+                            <option value="Enerji">Enerji</option>
+                            <option value="Kamu">Kamu Kuruluşu</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Firma Adresi *</label>
+                        <textarea class="form-control" name="adres" rows="3" required></textarea>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Telefon *</label>
+                        <input type="tel" class="form-control form-control-lg" name="telefon" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">E-posta *</label>
+                        <input type="email" class="form-control form-control-lg" name="email" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Web Sitesi</label>
+                        <input type="url" class="form-control form-control-lg" name="webSitesi" placeholder="https://">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4 class="mb-4"><i class="fas fa-user-tie me-2"></i>Yetkili Kişi Bilgileri</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Yetkili Ad Soyad *</label>
+                        <input type="text" class="form-control form-control-lg" name="yetkiliAdi" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Ünvanı</label>
+                        <input type="text" class="form-control form-control-lg" name="yetkiliUnvan" placeholder="İnsan Kaynakları Müdürü">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Yetkili Telefon *</label>
+                        <input type="tel" class="form-control form-control-lg" name="yetkiliTelefon" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Yetkili E-posta *</label>
+                        <input type="email" class="form-control form-control-lg" name="yetkiliEmail" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4 class="mb-4"><i class="fas fa-users me-2"></i>Staj Kapasitesi</h4>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Alınabilecek Stajyer Sayısı</label>
+                        <input type="number" class="form-control form-control-lg" name="stajyerSayisi" min="1" value="1">
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Staj Alanları</label>
+                        <textarea class="form-control" name="stajAlanlari" rows="2" placeholder="Hangi alanlarda staj imkanı sunuyorsunuz?"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-submit btn-lg text-white px-5">
+                    <i class="fas fa-save me-2"></i>Firma Kaydet
+                </button>
+                <button type="reset" class="btn btn-outline-secondary btn-lg px-5 ms-3">
+                    <i class="fas fa-redo me-2"></i>Formu Temizle
+                </button>
+            </div>
+        </form>
+
+        <!-- Kayıtlı Firmalar -->
+        <div class="form-section mt-4">
+            <h4 class="mb-4"><i class="fas fa-list me-2"></i>Kayıtlı Firmalar</h4>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Firma Adı</th>
+                            <th>Sektör</th>
+                            <th>Yetkili</th>
+                            <th>Telefon</th>
+                            <th>Stajyer Kapasitesi</th>
+                            <th>Kayıt Tarihi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="firmaListesi">
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                Henüz kayıtlı firma bulunmamaktadır.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let firmalar = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('Lütfen önce giriş yapınız!');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            loadFirmalar();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('firmaForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveFirma();
+            });
+        }
+
+        function loadFirmalar() {
+            firmalar = JSON.parse(localStorage.getItem('firmalar')) || [];
+            renderTable();
+        }
+
+        function saveFirma() {
+            const formData = new FormData(document.getElementById('firmaForm'));
+            const firma = {};
+
+            for (let [key, value] of formData.entries()) {
+                firma[key] = value;
+            }
+
+            // Validate required fields
+            const requiredFields = ['firmaAdi', 'sektor', 'adres', 'telefon', 'email', 'yetkiliAdi', 'yetkiliTelefon', 'yetkiliEmail'];
+            for (let field of requiredFields) {
+                if (!firma[field] || !firma[field].trim()) {
+                    alert('Lütfen tüm zorunlu alanları doldurunuz.');
+                    return;
+                }
+            }
+
+            firma.id = Date.now();
+            firma.kayitTarihi = new Date().toLocaleDateString('tr-TR');
+            firma.durum = 'aktif';
+            firma.stajyerSayisi = firma.stajyerSayisi || 1;
+
+            firmalar.push(firma);
+            localStorage.setItem('firmalar', JSON.stringify(firmalar));
+
+            // Add activity
+            const activity = {
+                id: Date.now(),
+                tarih: new Date().toLocaleDateString('tr-TR'),
+                saat: new Date().toLocaleTimeString('tr-TR'),
+                islem: 'Firma Kaydı',
+                kullanici: firma.firmaAdi,
+                durum: 'Başarılı',
+                durumClass: 'success'
+            };
+
+            let activities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+            activities.unshift(activity);
+            localStorage.setItem('recentActivities', JSON.stringify(activities));
+
+            renderTable();
+            document.getElementById('firmaForm').reset();
+            
+            alert(`${firma.firmaAdi} başarıyla sisteme kaydedildi!`);
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('firmaListesi');
+            
+            if (firmalar.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            Henüz kayıtlı firma bulunmamaktadır.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            firmalar.forEach(firma => {
+                const webLink = firma.webSitesi ? `<a href="${firma.webSitesi}" target="_blank">${firma.webSitesi}</a>` : 'Web sitesi yok';
+                
+                const row = `
+                    <tr>
+                        <td>
+                            <div class="fw-bold">${firma.firmaAdi}</div>
+                            <small class="text-muted">${webLink}</small>
+                        </td>
+                        <td><span class="badge bg-info">${firma.sektor}</span></td>
+                        <td>
+                            <div>${firma.yetkiliAdi}</div>
+                            <small class="text-muted">${firma.yetkiliUnvan || ''}</small>
+                        </td>
+                        <td>
+                            <div>${firma.telefon}</div>
+                            <small class="text-muted">${firma.yetkiliTelefon}</small>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-success">${firma.stajyerSayisi} kişi</span>
+                        </td>
+                        <td><small>${firma.kayitTarihi}</small></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1" onclick="showDetails(${firma.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-info" onclick="printFirma(${firma.id})">
+                                <i class="fas fa-print"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function showDetails(firmaId) {
+            const firma = firmalar.find(f => f.id === firmaId);
+            if (!firma) return;
+
+            const detayText = `
+Firma Detayları:
+─────────────────
+Firma: ${firma.firmaAdi}
+Sektör: ${firma.sektor}
+Adres: ${firma.adres}
+Telefon: ${firma.telefon}
+E-posta: ${firma.email}
+Web: ${firma.webSitesi || 'Belirtilmemiş'}
+
+Yetkili Kişi:
+─────────────────
+Ad: ${firma.yetkiliAdi}
+Ünvan: ${firma.yetkiliUnvan || 'Belirtilmemiş'}
+Telefon: ${firma.yetkiliTelefon}
+E-posta: ${firma.yetkiliEmail}
+
+Staj Bilgileri:
+─────────────────
+Kapasite: ${firma.stajyerSayisi} kişi
+Alanlar: ${firma.stajAlanlari || 'Belirtilmemiş'}
+Kayıt: ${firma.kayitTarihi}
+            `;
+
+            alert(detayText);
+        }
+
+        function printFirma(firmaId) {
+            const firma = firmalar.find(f => f.id === firmaId);
+            if (!firma) return;
+
+            const printWindow = window.open('', '_blank');
+            
+            // Create HTML content using array join method
+            const htmlParts = [
+                '<!DOCTYPE html>',
+                '<html>',
+                '<head>',
+                '<title>Firma Bilgi Formu - ' + firma.firmaAdi + '</title>',
+                '<style>',
+                'body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }',
+                '.header { text-align: center; border-bottom: 2px solid #1e40af; padding-bottom: 20px; margin-bottom: 30px; }',
+                '.section { margin: 20px 0; }',
+                '.section h3 { color: #1e40af; border-bottom: 1px solid #ddd; padding-bottom: 10px; }',
+                '.info-item { margin: 10px 0; }',
+                '.info-item strong { display: inline-block; width: 150px; }',
+                '@media print { .no-print { display: none !important; } }',
+                '</style>',
+                '</head>',
+                '<body>',
+                '<div class="header">',
+                '<h1>ADIYAMAN ÜNİVERSİTESİ</h1>',
+                '<h2>FİRMA BİLGİ FORMU</h2>',
+                '</div>',
+                '<div class="section">',
+                '<h3>Firma Bilgileri</h3>',
+                '<div class="info-item"><strong>Firma Adı:</strong> ' + firma.firmaAdi + '</div>',
+                '<div class="info-item"><strong>Sektör:</strong> ' + firma.sektor + '</div>',
+                '<div class="info-item"><strong>Adres:</strong> ' + firma.adres + '</div>',
+                '<div class="info-item"><strong>Telefon:</strong> ' + firma.telefon + '</div>',
+                '<div class="info-item"><strong>E-posta:</strong> ' + firma.email + '</div>',
+                '<div class="info-item"><strong>Web Sitesi:</strong> ' + (firma.webSitesi || 'Belirtilmemiş') + '</div>',
+                '</div>',
+                '<div class="section">',
+                '<h3>Yetkili Kişi</h3>',
+                '<div class="info-item"><strong>Ad Soyad:</strong> ' + firma.yetkiliAdi + '</div>',
+                '<div class="info-item"><strong>Ünvan:</strong> ' + (firma.yetkiliUnvan || 'Belirtilmemiş') + '</div>',
+                '<div class="info-item"><strong>Telefon:</strong> ' + firma.yetkiliTelefon + '</div>',
+                '<div class="info-item"><strong>E-posta:</strong> ' + firma.yetkiliEmail + '</div>',
+                '</div>',
+                '<div class="section">',
+                '<h3>Staj Bilgileri</h3>',
+                '<div class="info-item"><strong>Stajyer Kapasitesi:</strong> ' + firma.stajyerSayisi + ' kişi</div>',
+                '<div class="info-item"><strong>Staj Alanları:</strong> ' + (firma.stajAlanlari || 'Belirtilmemiş') + '</div>',
+                '<div class="info-item"><strong>Kayıt Tarihi:</strong> ' + firma.kayitTarihi + '</div>',
+                '</div>',
+                '<div style="margin-top: 50px; text-align: right;">',
+                '<p>Bilgi İşlem Daire Başkanlığı<br>Adıyaman Üniversitesi</p>',
+                '</div>',
+                '<div class="no-print" style="position: fixed; top: 20px; right: 20px;">',
+                '<button onclick="window.print()" style="padding: 10px 20px; background: #1e40af; color: white; border: none; border-radius: 5px;">Yazdır</button>',
+                '</div>',
+                '</body>',
+                '</html>'
+            ];
+            
+            const printContent = htmlParts.join('');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            
+            // Auto print after content loads
+            printWindow.onload = function() {
+                printWindow.print();
+            };
+        }
+    </script>
+</body>
+</html>

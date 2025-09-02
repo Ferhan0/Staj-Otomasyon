@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ana Panel - Adıyaman Üniversitesi</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+        }
+        
+        body { 
+            background-color: #f8fafc; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar {
+            background: white;
+            min-height: calc(100vh - 76px);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link {
+            padding: 15px 20px;
+            color: #64748b;
+            border-radius: 10px;
+            margin: 5px 15px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: #f1f5f9;
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+            border: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 35px rgba(0,0,0,0.15);
+        }
+        
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+        
+        .stats-card.users::before { background: var(--success-color); }
+        .stats-card.internships::before { background: var(--danger-color); }
+        .stats-card.companies::before { background: var(--warning-color); }
+        .stats-card.departments::before { background: var(--primary-color); }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .stats-icon {
+            font-size: 3rem;
+            opacity: 0.8;
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover .stats-icon {
+            transform: scale(1.1);
+        }
+        
+        .quick-action-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            color: white;
+        }
+        
+        .user-info {
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 10px;
+            color: white;
+        }
+        
+        .activity-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background-color 0.3s;
+        }
+        
+        .activity-item:hover {
+            background-color: #f8fafc;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sidebar-toggle {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                z-index: 1000;
+                width: 280px;
+            }
+            
+            .sidebar.show {
+                left: 0;
+            }
+            
+            .sidebar-toggle {
+                display: block;
+            }
+            
+            .main-content {
+                margin-left: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <button class="btn btn-outline-light sidebar-toggle me-3" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-graduation-cap me-2"></i>
+                Adıyaman Üniversitesi - Staj Yönetim Sistemi
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown me-3">
+                    <a class="nav-link dropdown-toggle text-white position-relative" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell me-1"></i>
+                        <span class="notification-badge" id="notificationCount">0</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" id="notificationDropdown">
+                        <li><h6 class="dropdown-header">Bildirimler</h6></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle me-2"></i>Henüz bildirim yok</a></li>
+                    </ul>
+                </div>
+                <span class="navbar-text me-3" id="userWelcome">Hoş geldiniz!</span>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><h6 class="dropdown-header">Kullanıcı Menüsü</h6></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="showUserProfile()"><i class="fas fa-user me-2"></i>Profil</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showSettings()"><i class="fas fa-cog me-2"></i>Ayarlar</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Çıkış</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0">
+                <div class="sidebar" id="sidebar">
+                    <div class="user-info d-flex align-items-center p-3">
+                        <div class="user-avatar" id="userAvatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark" id="userName">Kullanıcı</div>
+                            <small class="text-muted" id="userRole">Rol</small>
+                        </div>
+                    </div>
+                    
+                    <nav class="nav flex-column py-3">
+                        <a class="nav-link active" href="dashboard.html" onclick="setActiveNav(this)">
+                            <i class="fas fa-tachometer-alt me-2"></i>Ana Panel
+                        </a>
+                        <a class="nav-link" href="staj-basvuru.html" onclick="setActiveNav(this)">
+                            <i class="fas fa-plus me-2"></i>Staj Başvurusu
+                        </a>
+                        <a class="nav-link" href="staj-listesi.html" onclick="setActiveNav(this)">
+                            <i class="fas fa-list me-2"></i>Staj Listesi
+                        </a>
+                        <a class="nav-link" href="firma-kayit.html" onclick="setActiveNav(this)">
+                            <i class="fas fa-building me-2"></i>Firma Kaydı
+                        </a>
+                        <a class="nav-link" href="raporlar.html" onclick="setActiveNav(this)">
+                            <i class="fas fa-chart-bar me-2"></i>Raporlar
+                        </a>
+                        
+                        <!-- Role-based menu items -->
+                        <div id="roleBasedMenu" style="display: none;">
+                            <hr class="mx-3">
+                            <h6 class="px-3 text-muted small">ROL ÖZEL MENÜ</h6>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="p-4">
+                    <!-- Page Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2><i class="fas fa-home me-2"></i>Sistem Ana Paneli</h2>
+                            <p class="text-muted">Adıyaman Üniversitesi Bilgi İşlem Daire Başkanlığı</p>
+                        </div>
+                        <div class="text-end">
+                            <small class="text-muted">Son güncelleme: <span id="lastUpdate"></span></small>
+                            <br>
+                            <button class="btn btn-sm btn-outline-primary" onclick="refreshData()">
+                                <i class="fas fa-sync-alt"></i> Yenile
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="row mb-4">
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card stats-card users h-100" onclick="navigateTo('staj-listesi.html')">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-8">
+                                            <div class="stats-number text-success" id="userCount">0</div>
+                                            <div class="text-muted">Kayıtlı Kullanıcı</div>
+                                        </div>
+                                        <div class="col-4 text-end">
+                                            <i class="fas fa-users stats-icon text-success"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card stats-card internships h-100" onclick="navigateTo('staj-listesi.html')">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-8">
+                                            <div class="stats-number text-danger" id="internshipCount">0</div>
+                                            <div class="text-muted">Toplam Staj</div>
+                                        </div>
+                                        <div class="col-4 text-end">
+                                            <i class="fas fa-briefcase stats-icon text-danger"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card stats-card companies h-100" onclick="navigateTo('firma-kayit.html')">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-8">
+                                            <div class="stats-number text-warning" id="companyCount">0</div>
+                                            <div class="text-muted">Kayıtlı Firma</div>
+                                        </div>
+                                        <div class="col-4 text-end">
+                                            <i class="fas fa-building stats-icon text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <div class="card stats-card departments h-100">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-8">
+                                            <div class="stats-number text-primary" id="departmentCount">23</div>
+                                            <div class="text-muted">Aktif Bölüm</div>
+                                        </div>
+                                        <div class="col-4 text-end">
+                                            <i class="fas fa-university stats-icon text-primary"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions & Recent Activity -->
+                    <div class="row">
+                        <div class="col-lg-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5><i class="fas fa-bolt me-2"></i>Hızlı İşlemler</h5>
+                                    <small class="text-muted">Son kullanılan</small>
+                                </div>
+                                <div class="card-body">
+                                    <a href="staj-basvuru.html" class="quick-action-btn" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+                                        <i class="fas fa-plus me-2"></i>Yeni Staj Başvurusu
+                                    </a>
+                                    <a href="firma-kayit.html" class="quick-action-btn" style="background: linear-gradient(135deg, var(--success-color), #059669);">
+                                        <i class="fas fa-building me-2"></i>Yeni Firma Kaydı
+                                    </a>
+                                    <a href="staj-listesi.html" class="quick-action-btn" style="background: linear-gradient(135deg, var(--warning-color), #d97706);">
+                                        <i class="fas fa-list me-2"></i>Staj Listesi
+                                    </a>
+                                    <a href="raporlar.html" class="quick-action-btn" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                                        <i class="fas fa-chart-bar me-2"></i>Raporları Görüntüle
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8 mb-4">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5><i class="fas fa-clock me-2"></i>Son İşlemler</h5>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="refreshActivities()">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="recent<table class="table table-hover" id="recentActivities">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tarih</th>
+                                                    <th>İşlem</th>
+                                                    <th>Kullanıcı</th>
+                                                    <th>Durum</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="4" class="text-center text-muted">
+                                                        <i class="fas fa-info-circle me-2"></i>
+                                                        Henüz işlem yapılmamış
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentUser = null;
+        let notificationCount = 0;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            initializeDashboard();
+        });
+        
+        function initializeDashboard() {
+            updateUserInfo();
+            updateStats();
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString('tr-TR');
+            loadRecentActivities();
+            loadNotifications();
+            showRoleBasedMenu();
+            
+            // Auto refresh every 5 minutes
+            setInterval(() => {
+                updateStats();
+                loadRecentActivities();
+                loadNotifications();
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleString('tr-TR');
+            }, 300000);
+        }
+        
+        function updateUserInfo() {
+            document.getElementById('userWelcome').textContent = `Hoş geldiniz, ${currentUser.name}!`;
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = currentUser.role || 'Kullanıcı';
+            
+            const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.getElementById('userAvatar').innerHTML = `<span class="fw-bold">${initials}</span>`;
+        }
+        
+        function updateStats() {
+            const stajlar = JSON.parse(localStorage.getItem('stajBasvurulari')) || [];
+            const firmalar = JSON.parse(localStorage.getItem('firmalar')) || [];
+            
+            animateNumber('userCount', stajlar.length + 150);
+            animateNumber('internshipCount', stajlar.length);
+            animateNumber('companyCount', firmalar.length);
+        }
+        
+        function animateNumber(elementId, targetNumber) {
+            const element = document.getElementById(elementId);
+            const startNumber = parseInt(element.textContent) || 0;
+            const increment = Math.max(1, Math.floor((targetNumber - startNumber) / 20));
+            let currentNumber = startNumber;
+            
+            const timer = setInterval(() => {
+                currentNumber += increment;
+                if (currentNumber >= targetNumber) {
+                    currentNumber = targetNumber;
+                    clearInterval(timer);
+                }
+                element.textContent = currentNumber;
+            }, 50);
+        }
+        
+        function loadRecentActivities() {
+            const activities = JSON.parse(localStorage.getItem('recentActivities')) || [];
+            const tbody = document.querySelector('#recentActivities tbody');
+            
+            if (activities.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Henüz işlem yapılmamış
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            activities.slice(0, 5).forEach(activity => {
+                const row = `
+                    <tr class="activity-item">
+                        <td><small>${activity.tarih}</small></td>
+                        <td>${activity.islem}</td>
+                        <td>${activity.kullanici}</td>
+                        <td><span class="badge bg-${activity.durumClass}">${activity.durum}</span></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+        
+        function loadNotifications() {
+            const activities = JSON.parse(localStorage.getItem('recentActivities')) || [];
+            const stajlar = JSON.parse(localStorage.getItem('stajBasvurulari')) || [];
+            
+            const pendingStaj = stajlar.filter(s => s.durum === 'beklemede').length;
+            notificationCount = pendingStaj;
+            
+            document.getElementById('notificationCount').textContent = notificationCount;
+            
+            const dropdown = document.getElementById('notificationDropdown');
+            if (notificationCount > 0) {
+                dropdown.innerHTML = `
+                    <li><h6 class="dropdown-header">Bildirimler (${notificationCount})</h6></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="staj-listesi.html">
+                        <i class="fas fa-clock me-2 text-warning"></i>
+                        ${pendingStaj} staj başvurusu onay bekliyor
+                    </a></li>
+                `;
+            } else {
+                dropdown.innerHTML = `
+                    <li><h6 class="dropdown-header">Bildirimler</h6></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-muted" href="#"><i class="fas fa-info-circle me-2"></i>Henüz bildirim yok</a></li>
+                `;
+            }
+        }
+        
+        function showRoleBasedMenu() {
+            const roleMenu = document.getElementById('roleBasedMenu');
+            
+            if (currentUser.type === 'admin') {
+                roleMenu.innerHTML = `
+                    <hr class="mx-3">
+                    <h6 class="px-3 text-muted small">YÖNETİCİ MENÜSÜ</h6>
+                    <a class="nav-link" href="#" onclick="showSystemSettings()">
+                        <i class="fas fa-cogs me-2"></i>Sistem Ayarları
+                    </a>
+                    <a class="nav-link" href="#" onclick="showUserManagement()">
+                        <i class="fas fa-users-cog me-2"></i>Kullanıcı Yönetimi
+                    </a>
+                `;
+                roleMenu.style.display = 'block';
+            }
+        }
+        
+        function setActiveNav(element) {
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            element.classList.add('active');
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+        
+        function navigateTo(url) {
+            window.location.href = url;
+        }
+        
+        function refreshData() {
+            updateStats();
+            loadRecentActivities();
+            loadNotifications();
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString('tr-TR');
+        }
+        
+        function refreshActivities() {
+            loadRecentActivities();
+            loadNotifications();
+        }
+        
+        function showUserProfile() {
+            alert('Profil sayfası geliştirme aşamasındadır.');
+        }
+        
+        function showSettings() {
+            alert('Ayarlar sayfası geliştirme aşamasındadır.');
+        }
+        
+        function showSystemSettings() {
+            alert('Sistem ayarları geliştirme aşamasındadır.');
+        }
+        
+        function showUserManagement() {
+            alert('Kullanıcı yönetimi geliştirme aşamasındadır.');
+        }
+        
+        function logout() {
+            if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
+                const logoutActivity = {
+                    id: Date.now(),
+                    tarih: new Date().toLocaleDateString('tr-TR'),
+                    saat: new Date().toLocaleTimeString('tr-TR'),
+                    islem: 'Çıkış Yapıldı',
+                    kullanici: currentUser.name,
+                    durum: 'Başarılı',
+                    durumClass: 'info'
+                };
+                
+                let activities = JSON.parse(localStorage.getItem('recentActivities')) || [];
+                activities.unshift(logoutActivity);
+                localStorage.setItem('recentActivities', JSON.stringify(activities));
+                
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('isLoggedIn');
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            
+            if (window.innerWidth <= 768 && 
+                sidebar && sidebarToggle &&
+                !sidebar.contains(e.target) && 
+                !sidebarToggle.contains(e.target) && 
+                sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
