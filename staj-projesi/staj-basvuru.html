@@ -292,19 +292,21 @@
                 stajlar.push(basvuru);
                 localStorage.setItem('stajBasvurulari', JSON.stringify(stajlar));
                 
-                // Add activity
                 const activity = {
                     id: Date.now(),
                     tarih: new Date().toLocaleDateString('tr-TR'),
                     saat: new Date().toLocaleTimeString('tr-TR'),
                     islem: 'Staj Başvurusu',
                     kullanici: basvuru.adSoyad,
-                    durum: 'Başarılı',
+                    durum: 'Başvuru kaydedildi',
                     durumClass: 'success'
                 };
-                
+
                 let activities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
                 activities.unshift(activity);
+                if (activities.length > 50) {
+                    activities = activities.slice(0, 50);
+                }
                 localStorage.setItem('recentActivities', JSON.stringify(activities));
                 
                 alert(`Staj başvurunuz başarıyla kaydedildi!\n\nBaşvuru No: ${basvuru.id}\nTarih: ${basvuru.basvuruTarihi}`);

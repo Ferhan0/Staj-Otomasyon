@@ -484,58 +484,61 @@
         }
         
         function createTableRow(app) {
-            const statusClass = {
-                'beklemede': 'bg-warning text-dark',
-                'onaylandi': 'bg-success text-white',
-                'reddedildi': 'bg-danger text-white'
-            };
-        
-            const statusText = {
-                'beklemede': 'Beklemede',
-                'onaylandi': 'Onaylandı',
-                'reddedildi': 'Reddedildi'
-            };
-        
-            return `
-                <tr>
-                    <td><strong>#${app.id}</strong></td>
-                    <td>
-                        <div class="fw-bold">${app.adSoyad}</div>
-                        <small class="text-muted">${app.ogrenciNo}</small><br>
-                        <small class="text-muted">${app.telefon}</small>
-                    </td>
-                    <td>
-                        <div>${app.bolum}</div>
-                        <small class="text-muted">${app.fakulte || ''}</small>
-                    </td>
-                    <td>
-                        <span class="badge bg-primary">${app.stajTuru}</span>
-                    </td>
-                    <td>
-                        <div class="fw-bold">${app.firmaAdi}</div>
-                        <small class="text-muted">${app.firmaSektoru}</small>
-                    </td>
-                    <td>
-                        <small>
-                            <div><strong>Başlangıç:</strong> ${app.baslangicTarihi}</div>
-                            <div><strong>Bitiş:</strong> ${app.bitisTarihi}</div>
-                            <div class="text-muted">Başvuru: ${app.basvuruTarihi}</div>
-                        </small>
-                    </td>
-                    <td>
-                        <span class="status-badge ${statusClass[app.durum]}">${statusText[app.durum]}</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-action btn-info" onclick="showDetails(${app.id})" title="Detayları Görüntüle">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-action btn-warning" onclick="showStatusModal(${app.id})" title="Durum Değiştir">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
-        }
+    const statusClass = {
+        'beklemede': 'bg-warning text-dark',
+        'onaylandi': 'bg-success text-white',
+        'reddedildi': 'bg-danger text-white'
+    };
+
+    const statusText = {
+        'beklemede': 'Beklemede',
+        'onaylandi': 'Onaylandı',
+        'reddedildi': 'Reddedildi'
+    };
+
+    return `
+        <tr>
+            <td><strong>#${app.id}</strong></td>
+            <td>
+                <div class="fw-bold">${app.adSoyad}</div>
+                <small class="text-muted">${app.ogrenciNo}</small><br>
+                <small class="text-muted">${app.telefon}</small>
+            </td>
+            <td>
+                <div>${app.bolum}</div>
+                <small class="text-muted">${app.fakulte || ''}</small>
+            </td>
+            <td>
+                <span class="badge bg-primary">${app.stajTuru}</span>
+            </td>
+            <td>
+                <div class="fw-bold">${app.firmaAdi}</div>
+                <small class="text-muted">${app.firmaSektoru}</small>
+            </td>
+            <td>
+                <small>
+                    <div><strong>Başlangıç:</strong> ${app.baslangicTarihi}</div>
+                    <div><strong>Bitiş:</strong> ${app.bitisTarihi}</div>
+                    <div class="text-muted">Başvuru: ${app.basvuruTarihi}</div>
+                </small>
+            </td>
+            <td>
+                <span class="status-badge ${statusClass[app.durum]}">${statusText[app.durum]}</span>
+            </td>
+            <td>
+                <button class="btn btn-action btn-info" onclick="showDetails(${app.id})" title="Detayları Görüntüle">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-action btn-warning" onclick="showStatusModal(${app.id})" title="Durum Değiştir">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-action btn-danger" onclick="deleteApplication(${app.id})" title="Başvuruyu Sil">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `;
+}
         
         function exportToExcel() {
             if (typeof XLSX === 'undefined') {
@@ -576,6 +579,37 @@
             updateStatistics();
             showToast('Liste başarıyla yenilendi!', 'info');
         }
+
+            function deleteApplication(appId) {
+        const app = allApplications.find(a => a.id === appId);
+        if (!app) return;
+
+        if (confirm(`${app.adSoyad} adlı öğrencinin staj başvurusunu silmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz!`)) {
+            // Başvuruyu sil
+            allApplications = allApplications.filter(a => a.id !== appId);
+            localStorage.setItem('stajBasvurulari', JSON.stringify(allApplications));
+
+            // Aktivite ekle
+            const activity = {
+                id: Date.now(),
+                tarih: new Date().toLocaleDateString('tr-TR'),
+                saat: new Date().toLocaleTimeString('tr-TR'),
+                islem: 'Başvuru Silme',
+                kullanici: app.adSoyad,
+                durum: 'Silindi',
+                durumClass: 'danger'
+            };
+
+            let activities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+            activities.unshift(activity);
+            localStorage.setItem('recentActivities', JSON.stringify(activities));
+
+            // Tabloyu güncelle
+            loadApplications();
+            updateStatistics();
+            showToast('Başvuru başarıyla silindi!', 'success');
+        }
+    }
         
         function clearFilters() {
             document.getElementById('searchInput').value = '';
@@ -650,6 +684,37 @@
                 showToast('Başvuru durumu güncellendi!', 'success');
             }
         }
+        
+        function deleteApplication(appId) {
+    const app = allApplications.find(a => a.id === appId);
+    if (!app) return;
+
+    if (confirm(`${app.adSoyad} adlı öğrencinin staj başvurusunu silmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz!`)) {
+        allApplications = allApplications.filter(a => a.id !== appId);
+        localStorage.setItem('stajBasvurulari', JSON.stringify(allApplications));
+
+        const activity = {
+            id: Date.now(),
+            tarih: new Date().toLocaleDateString('tr-TR'),
+            saat: new Date().toLocaleTimeString('tr-TR'),
+            islem: 'Başvuru Silme',
+            kullanici: app.adSoyad,
+            durum: 'Başvuru silindi',
+            durumClass: 'danger'
+        };
+
+        let activities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+        activities.unshift(activity);
+        if (activities.length > 50) {
+            activities = activities.slice(0, 50);
+        }
+        localStorage.setItem('recentActivities', JSON.stringify(activities));
+
+        loadApplications();
+        updateStatistics();
+        showToast('Başvuru başarıyla silindi!', 'success');
+    }
+}
         
         function updatePagination() {
             const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);

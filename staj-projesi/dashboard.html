@@ -398,7 +398,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-hover" id="recent<table class="table table-hover" id="recentActivities">
+                                        <table class="table table-hover" id="recentActivities">
                                             <thead>
                                                 <tr>
                                                     <th>Tarih</th>
@@ -471,7 +471,7 @@
             const stajlar = JSON.parse(localStorage.getItem('stajBasvurulari')) || [];
             const firmalar = JSON.parse(localStorage.getItem('firmalar')) || [];
             
-            animateNumber('userCount', stajlar.length + 150);
+            animateNumber('userCount', stajlar.length);
             animateNumber('internshipCount', stajlar.length);
             animateNumber('companyCount', firmalar.length);
         }

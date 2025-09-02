@@ -212,19 +212,22 @@
             firmalar.push(firma);
             localStorage.setItem('firmalar', JSON.stringify(firmalar));
 
-            // Add activity
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             const activity = {
                 id: Date.now(),
                 tarih: new Date().toLocaleDateString('tr-TR'),
                 saat: new Date().toLocaleTimeString('tr-TR'),
                 islem: 'Firma Kaydı',
-                kullanici: firma.firmaAdi,
-                durum: 'Başarılı',
+                kullanici: currentUser ? currentUser.name : 'Sistem',
+                durum: `${firma.firmaAdi} kaydedildi`,
                 durumClass: 'success'
             };
 
             let activities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
             activities.unshift(activity);
+            if (activities.length > 50) {
+                activities = activities.slice(0, 50);
+            }
             localStorage.setItem('recentActivities', JSON.stringify(activities));
 
             renderTable();
