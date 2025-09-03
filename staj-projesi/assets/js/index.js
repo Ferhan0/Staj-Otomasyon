@@ -1,4 +1,23 @@
-const testUsers = {};
+const testUsers = {
+    'admin': { 
+        password: 'admin123', 
+        type: 'admin', 
+        name: 'Sistem Yöneticisi', 
+        role: 'Bilgi İşlem Personeli' 
+    },
+    'ogrenci': { 
+        password: 'ogrenci123', 
+        type: 'ogrenci', 
+        name: 'Test Öğrenci', 
+        role: 'Öğrenci' 
+    },
+    'akademisyen': { 
+        password: 'akademisyen123', 
+        type: 'akademisyen', 
+        name: 'Test Akademisyen', 
+        role: 'Akademisyen' 
+    }
+};
 
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -11,6 +30,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     
+    // Test kullanıcısı kontrolü
     if (testUsers[username] && testUsers[username].password === password) {
         const currentUser = {
             username: username,

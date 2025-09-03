@@ -56,7 +56,7 @@ function getYariyil(stajTuru) {
 }
        
 function getDersKodu(stajTuru) {
-    const kodlar = { 'Yaz Stajı I': 'STAJ301', 'Yaz Stajı II': 'STAJ302', 'Zorunlu Staj': 'STAJ401' };
+    const kodlar = { 'Yaz Stajı I': ' ', 'Yaz Stajı II': ' ', 'Zorunlu Staj': ' ' };
     return kodlar[stajTuru] || 'STAJ';
 }
        
