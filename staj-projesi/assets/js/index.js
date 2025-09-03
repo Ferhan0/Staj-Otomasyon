@@ -1,7 +1,4 @@
-const testUsers = {
-    'admin': { password: 'admin123', type: 'admin', name: 'Bilgi İşlem Admin', role: 'Bilgi İşlem Personeli' },
-    'ogrenci': { password: 'student123', type: 'ogrenci', name: 'Test Öğrenci', role: 'Öğrenci' }
-};
+const testUsers = {};
 
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();

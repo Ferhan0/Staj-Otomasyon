@@ -40,38 +40,6 @@ function setupEventListeners() {
 function loadApplications() {
     allApplications = JSON.parse(localStorage.getItem('stajBasvurulari')) || [];
             
-    if (allApplications.length === 0) {
-        const ornekVeri = [
-            {
-                id: Date.now(),
-                adSoyad: "Ahmet Yılmaz",
-                ogrenciNo: "210101001",
-                fakulte: "Mühendislik Fakültesi",
-                bolum: "Bilgisayar Mühendisliği",
-                sinif: "3",
-                telefon: "0555-123-4567",
-                email: "ahmet@student.adiyaman.edu.tr",
-                stajTuru: "Yaz Stajı I",
-                akademikYil: "2024-2025",
-                baslangicTarihi: "2025-06-15",
-                bitisTarihi: "2025-07-15",
-                firmaAdi: "TechSoft Yazılım",
-                firmaSektoru: "Yazılım ve Bilişim",
-                firmaAdresi: "Adıyaman Merkez",
-                firmaTelefon: "0416-111-2233",
-                yetkiliKisi: "Mehmet Demir",
-                durum: "beklemede",
-                basvuruTarihi: new Date().toLocaleDateString('tr-TR'),
-                basvuruSaati: new Date().toLocaleTimeString('tr-TR'),
-                gssOnay: true,
-                bilgiOnay: true,
-                kvkkOnay: true
-            }
-        ];
-        allApplications = ornekVeri;
-        localStorage.setItem('stajBasvurulari', JSON.stringify(allApplications));
-    }
-            
     filteredApplications = [...allApplications];
     renderTable();
 }
