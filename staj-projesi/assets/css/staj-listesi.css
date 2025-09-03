@@ -1,0 +1,58 @@
+body {
+    background-color: #f8fafc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.filter-card, .table-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+.filter-card:hover, .table-card:hover {
+    box-shadow: 0 6px 30px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+}
+.stats-summary {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.stats-number {
+    font-size: 2rem;
+    font-weight: bold;
+}
+.status-badge {
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+.btn-action {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    border: none;
+    margin: 2px;
+}
+.btn-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.table-hover tbody tr:hover {
+    background-color: #f8fafc;
+    transform: scale(1.005);
+    transition: all 0.2s ease;
+}
+.pagination-wrapper {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+
+

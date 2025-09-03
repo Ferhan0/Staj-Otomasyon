@@ -1,0 +1,35 @@
+/* Screen styles */
+body { background-color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.form-container { background: white; margin: 20px auto; max-width: 210mm; box-shadow: 0 4px 25px rgba(0,0,0,0.1); }
+.no-print { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 20px; text-align: center; margin-bottom: 0; }
+.no-print .btn { margin: 0 10px; padding: 10px 20px; border: 2px solid white; color: white; background: transparent; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
+.no-print .btn:hover { background: white; color: #1e40af; }
+
+@media print {
+  body { background: white !important; margin: 0 !important; padding: 0 !important; }
+  .no-print { display: none !important; }
+  .form-container { box-shadow: none !important; margin: 0 !important; max-width: none !important; width: 100% !important; }
+  .page-break { page-break-before: always; }
+}
+
+.header-section { text-align: center; padding: 30px 40px 20px; border-bottom: 3px solid #1e40af; margin-bottom: 30px; }
+.university-logo { width: 80px; height: 80px; background: #1e40af; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; }
+.form-content { padding: 0 40px 40px; }
+.form-section { margin-bottom: 25px; }
+.form-section h4 { color: #1e40af; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.1rem; }
+.form-row { display: flex; margin-bottom: 15px; gap: 20px; }
+.form-field { flex: 1; min-height: 25px; display: flex; align-items: center; }
+.form-field label { font-weight: 600; margin-right: 10px; min-width: 120px; font-size: 0.9rem; }
+.form-field .underline { flex: 1; border-bottom: 1px solid #333; min-height: 25px; padding-left: 5px; font-weight: 500; }
+.checkbox-section { margin: 25px 0; }
+.checkbox-item { display: flex; align-items: center; margin-bottom: 10px; }
+.checkbox { width: 15px; height: 15px; border: 1px solid #333; margin-right: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+.signature-section { margin-top: 40px; display: flex; justify-content: space-between; gap: 40px; }
+.signature-box { text-align: center; flex: 1; }
+.signature-line { border-bottom: 1px solid #333; height: 50px; margin-bottom: 10px; }
+.date-field { display: inline-block; width: 150px; border-bottom: 1px solid #333; text-align: center; margin: 0 5px; }
+.bold { font-weight: 700; }
+.text-center { text-align: center; }
+.text-small { font-size: 0.85rem; }
+
+
